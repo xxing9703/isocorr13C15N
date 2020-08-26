@@ -1,0 +1,270 @@
+function varargout = gui_isocorr(varargin)
+% GUI_ISOCORR MATLAB code for gui_isocorr.fig
+%      GUI_ISOCORR, by itself, creates a new GUI_ISOCORR or raises the existing
+%      singleton*.
+%
+%      H = GUI_ISOCORR returns the handle to a new GUI_ISOCORR or the handle to
+%      the existing singleton*.
+%
+%      GUI_ISOCORR('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in GUI_ISOCORR.M with the given input arguments.
+%
+%      GUI_ISOCORR('Property','Value',...) creates a new GUI_ISOCORR or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before gui_isocorr_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to gui_isocorr_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help gui_isocorr
+
+% Last Modified by GUIDE v2.5 22-May-2020 23:51:31
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @gui_isocorr_OpeningFcn, ...
+                   'gui_OutputFcn',  @gui_isocorr_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before gui_isocorr is made visible.
+function gui_isocorr_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to gui_isocorr (see VARARGIN)
+
+% Choose default command line output for gui_isocorr
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes gui_isocorr wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = gui_isocorr_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+
+function edit_C_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_C (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_C as text
+%        str2double(get(hObject,'String')) returns contents of edit_C as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_C_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_C (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_N_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_N (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_N as text
+%        str2double(get(hObject,'String')) returns contents of edit_N as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_N_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_N (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in bt_load.
+function bt_load_Callback(hObject, eventdata, handles)
+% hObject    handle to bt_load (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ [file, path]=uigetfile('*.csv;*.xlsx');
+filename=fullfile(path,file);
+ if isequal(file,0)
+    disp('User selected Cancel');
+ else
+     A=readtable(filename,'readvariablename',true); %8/16/2020
+     handles.text_fname.String=filename;
+     %[~,~,B]=xlsread(filename);
+     %handles.uitable1.Data=B(2:end,:);
+     %handles.uitable1.ColumnName=B(1,:);     
+     handles.uitable1.Data=table2cell(A);
+     handles.uitable1.ColumnName=A.Properties.VariableNames;     
+     
+     handles.A=A;
+     guidata(hObject, handles);
+ end
+ handles.text_msg.String='Ready';
+ handles.bt_run.Enable='on';
+
+% --- Executes on button press in bt_run.
+function bt_run_Callback(hObject, eventdata, handles)
+% hObject    handle to bt_run (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+A=handles.A;
+start_col=15;
+%compound=unique(A.compound,'stable');%7/17/2020
+ID=unique(A.metaGroupId,'stable');  %7/17/2020
+dt_combo=[];
+%for i=1:length(compound)%7/17/2020
+for i=1:length(ID) %7/17/2020
+    i
+ %ids=find (strcmp(A.compound,compound(i)));%7/17/2020
+ ids=find(A.metaGroupId==ID(i));    %7/17/2020
+ A_sub=A(ids,:); 
+ try
+ [~,~,tp]=formula2mass(A_sub.formula{1});
+ catch
+     msgbox(['check row#',num2str(ids(1)+1),' for errors in the formula name: ',A_sub.formula{1}],'Error detected!');
+     return
+ end
+ n=tp(1);m=tp(2);
+ counts=[];
+ lb=A_sub.isotopeLabel;
+  for j=1:length(lb)
+      str=lb{j};
+      sub_str=split(str,'-');
+      num=length(sub_str);
+      if num==1
+          counts(j,1)=0;
+          counts(j,2)=0;          
+      elseif num==3
+          if strcmp(str(1),'C')
+              counts(j,1)=str2num(sub_str{end});
+              counts(j,2)=0; 
+          elseif strcmp(str(1),'N')
+              counts(j,1)=0;
+              counts(j,2)=str2num(sub_str{end}); 
+          else
+              fprintf('something is wrong.......');              
+          end
+      elseif num==4
+          counts(j,1)=str2num(sub_str{end-1});
+          counts(j,2)=str2num(sub_str{end});          
+      else
+          fprintf('something is wrong');
+      end
+  end
+  
+ %aa=combvec(0:m,0:n)';
+   v1=repmat(0:m,1,n+1);
+   v2=reshape(repmat(0:n,m+1,1),1,(m+1)*(n+1));
+   aa=[v1;v2]';
+   
+ 
+ aa=aa(:,[2,1]); %full list
+ dt=A_sub{:,start_col:end};
+ fulldt=[]; nr=[]; nj=[];
+  for j=1:size(aa,1)
+      tp=find(ismember(counts,aa(j,:),'rows'));
+      if isempty(tp)
+          fulldt=[fulldt;zeros(1,size(dt,2))];
+      else
+          nr=[nr,tp];
+          nj=[nj,j];
+          fulldt=[fulldt;dt(tp,:)];
+      end
+  end
+  impurity_C=str2num(handles.edit_C.String);
+  impurity_N=str2num(handles.edit_N.String);
+  
+ [out1,~,out2]=isocorr_CN(fulldt,n,m,impurity_C,impurity_N);
+  if handles.popup1.Value==1 
+     dtout=out2; %relative ratio
+  else
+      dtout=out1; %abs intensity
+  end
+  [~,b]=sort(nr);
+  dtout=dtout(nj(b),:);
+  dt_combo=[dt_combo;dtout];
+  
+end
+A_sub1=A(:,1:start_col-1);
+A_sub2=A(:,start_col:end);
+A_sub2{:,:}=dt_combo;
+A_corrected=[A_sub1,A_sub2];
+B=handles.uitable1.Data;
+B(:,start_col:end)=num2cell(dt_combo);
+handles.uitable1.Data=B;
+
+fname=handles.text_fname.String;
+[filepath,name,ext] = fileparts(fname);
+fname_S=fullfile(filepath,[name,'_cor',ext]);
+writetable(A_corrected,fname_S);
+handles.text_msg.String='Successful';
+
+% --- Executes on button press in bt_save.
+function bt_save_Callback(hObject, eventdata, handles)
+% hObject    handle to bt_save (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on selection change in popup1.
+function popup1_Callback(hObject, eventdata, handles)
+% hObject    handle to popup1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popup1 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popup1
+
+
+% --- Executes during object creation, after setting all properties.
+function popup1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popup1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
