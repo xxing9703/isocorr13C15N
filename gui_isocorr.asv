@@ -1,5 +1,5 @@
 function varargout = gui_isocorr(varargin)
-%
+% ----test
 % GUI_ISOCORR MATLAB code for gui_isocorr.fig
 %      GUI_ISOCORR, by itself, creates a new GUI_ISOCORR or raises the existing
 %      singleton*.
@@ -130,6 +130,7 @@ filename=fullfile(path,file);
  if isequal(file,0)
     disp('User selected Cancel');
  else
+     handles.text_msg.String='Loading, plase wait...';drawnow();
      A=readtable(filename,'readvariablename',true); %8/16/2020
      handles.text_fname.String=filename;
      %[~,~,B]=xlsread(filename);

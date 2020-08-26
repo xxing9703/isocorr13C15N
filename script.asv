@@ -1,4 +1,4 @@
-% This is an earlier script version that the gui version is based on.
+% This is a script version that the gui version is based on.
 
 start_col=15;  %starting col number of data block.
 impurity_C=0.01;

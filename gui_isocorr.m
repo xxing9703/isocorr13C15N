@@ -130,6 +130,7 @@ filename=fullfile(path,file);
  if isequal(file,0)
     disp('User selected Cancel');
  else
+     handles.text_msg.String='Loading...';drawnow();
      A=readtable(filename,'readvariablename',true); %8/16/2020
      handles.text_fname.String=filename;
      %[~,~,B]=xlsread(filename);
@@ -150,7 +151,8 @@ function bt_run_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 A=handles.A;
-start_col=15;
+start_col=15; %do not change
+handles.text_msg.String='Please wait...';drawnow();
 %compound=unique(A.compound,'stable');%7/17/2020
 ID=unique(A.metaGroupId,'stable');  %7/17/2020
 dt_combo=[];
