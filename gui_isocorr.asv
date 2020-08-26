@@ -1,5 +1,5 @@
 function varargout = gui_isocorr(varargin)
-% ----test
+%
 % GUI_ISOCORR MATLAB code for gui_isocorr.fig
 %      GUI_ISOCORR, by itself, creates a new GUI_ISOCORR or raises the existing
 %      singleton*.

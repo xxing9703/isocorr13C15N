@@ -1,7 +1,7 @@
 start_col=15;  %starting col number of data block.
 impurity_C=0.01;
 impurity_N=0.01;
-fname='20200310-M1-13C15N-Arg.csv';
+%fname='20200310-M1-13C15N-Arg.csv';
 fname='example1.csv';
 %%
 [filepath,name,ext] = fileparts(fname);
