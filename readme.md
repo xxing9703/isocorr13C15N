@@ -31,10 +31,12 @@ It is simplified to only consider high resolution mass spectrometer that can wel
  Follow instructions on the GUI.
 
 
--- previous update:
+ # previous update:
 
 7/17 use metaGroupID as identifier,instead of formula name, to group data blocks belonging to the same metabolite. Sometimes, two metabolites with the same names/formula but different rt are considered different entries.
+
 8/16 readtable(~, 'variablename', true), allows column headers of the input file to be numbers or others. 
+
 8/17 use 'try... catch' to parse formula string, provides warning messagebox with #row hint if formula of that row contains errors.
  
 
