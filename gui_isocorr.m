@@ -1,5 +1,4 @@
 function varargout = gui_isocorr(varargin)
-% ----test
 % GUI_ISOCORR MATLAB code for gui_isocorr.fig
 %      GUI_ISOCORR, by itself, creates a new GUI_ISOCORR or raises the existing
 %      singleton*.
@@ -23,7 +22,7 @@ function varargout = gui_isocorr(varargin)
 
 % Edit the above text to modify the response to help gui_isocorr
 
-% Last Modified by GUIDE v2.5 22-May-2020 23:51:31
+% Last Modified by GUIDE v2.5 02-Nov-2020 13:49:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -138,7 +137,10 @@ filename=fullfile(path,file);
      %handles.uitable1.ColumnName=B(1,:);     
      handles.uitable1.Data=table2cell(A);
      handles.uitable1.ColumnName=A.Properties.VariableNames;     
-     
+     start_col=find(strcmp(A.Properties.VariableNames,'parent'))+1;
+if start_col~=15
+    msgbox(['warning: please check if you data block starts from column 15, seems like it starts from column ',num2str(start_col)]);
+end
      handles.A=A;
      guidata(hObject, handles);
  end
@@ -151,16 +153,19 @@ function bt_run_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 A=handles.A;
-start_col=15; %do not change
+start_col=str2num(handles.edit_start.String); %do not change
 handles.text_msg.String='Please wait...';drawnow();
 %compound=unique(A.compound,'stable');%7/17/2020
-ID=unique(A.metaGroupId,'stable');  %7/17/2020
+%ID=unique(A.metaGroupId,'stable');  %7/17/2020
+ID=find(strcmp(A.isotopeLabel,'C12 PARENT')); %group head %11/2/2020
+ID(end+1)=size(A,1)+1;  %add extra at the end
 dt_combo=[];
 %for i=1:length(compound)%7/17/2020
-for i=1:length(ID) %7/17/2020
+for i=1:length(ID)-1 %7/17/2020 %11/2/2020
     i
  %ids=find (strcmp(A.compound,compound(i)));%7/17/2020
- ids=find(A.metaGroupId==ID(i));    %7/17/2020
+ %ids=find(A.metaGroupId==ID(i));    %7/17/2020
+ ids=ID(i):ID(i+1)-1; %11/2/2020
  A_sub=A(ids,:); 
  try
  [~,~,tp]=formula2mass(A_sub.formula{1});
@@ -267,6 +272,29 @@ function popup1_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_start_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_start as text
+%        str2double(get(hObject,'String')) returns contents of edit_start as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_start_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
