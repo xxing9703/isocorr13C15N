@@ -137,7 +137,7 @@ writetable(A_corr_total,fname_all,'Sheet','total');
 fprintf('done!\n')
 
 %% report
-plot2bar(meta,'corr_pct',1,grp_name,[6,6],'tmp');
+%plot2bar(meta,'corr_pct',1,grp_name,[6,6],'tmp');
 
 
 
